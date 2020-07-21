@@ -1,3 +1,58 @@
 body {
-    padding: 10px;
+    padding: 0px;
+}
+.navbar{
+    display: flex;
+    height: 14vh;
+    padding: 20px 30px 20px 30px;
+    justify-content: space-between;
+}
+.right-nav{
+    display: flex
+}
+.right-nav input[type=text]{
+    border: 1px solid #59c65b;
+    height: 35px;
+    width: 20vw;
+    border-radius: 2px;
+    padding: 0px 10px 0px 10px;
+}
+.right-nav input[type=text]:focus{
+    outline: none;
+    box-shadow: inset 0 0 2.5px #59c65b;
+    transition-duration: 200ms;
+}
+.right-nav ::placeholder{
+    color: #59c65b;
+}
+.right-nav input[type=submit]{
+    background-color: #59c65b;
+    color: white;
+    width: 100px;
+    height: 35px;
+    border-radius: 2px;
+    margin: 5px;
+    border: none;
+    font-weight: 500;
+}
+.right-nav input[type=submit]:focus{
+    outline: none;
+    background-color: #4aba4c;
+    transition-duration: 100ms;
+}
+.menu{
+    background-color: rgb(89, 198, 91);
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 30px 0px 30px;
+    color: #2b2b2b;
+}
+.menu a{
+    text-decoration: none;
+    font-weight: 500;
+    color: #3a3a3a;
+}
+.menu a:hover{
+    color: #000000;
+    transition-duration: 200ms;
 }

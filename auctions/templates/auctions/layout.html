@@ -8,32 +8,67 @@
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     <body>
-        <h1>Auctions</h1>
-        <div>
-            {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
-            {% else %}
-                Not signed in.
-            {% endif %}
+        <div class="navbar">
+            <div class="logo left-nav">
+                <a href="{% url 'index' %}">
+                    <img src="{% static 'auctions/images/auction_logo.png' %}" height="52px" width="250px">
+                </a>
+            </div>
+            <div class="right-nav">
+                <form action="#" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="query" placeholder="Search Auctions..">
+                    <input type="submit" value="Search">
+                </form>
+            </div>
         </div>
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-            </li>
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-            {% endif %}
-        </ul>
-        <hr>
+        <div class="menu">
+            <div class="left-menu">
+                <div>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Categories</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Wishlist</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Your Listings</a>
+                            </li>
+                        {% else %}
+                            
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="right-menu nav">
+                
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            Signed in as <strong>{{ user.username }}</strong>
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <span class="nav-link">Not signed in</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+            </div>
+        </div>
         {% block body %}
         {% endblock %}
     </body>
