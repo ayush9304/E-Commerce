@@ -13,11 +13,15 @@
             <div class="listing-right">
                 <div class="top">
                     <h4>{{list.title}}</h4>
-                    <small>Listing ID : {{list.id}}&nbsp;&nbsp;|&nbsp;&nbsp;Created : {{list.create_time}}</small><br><br>
+                    <small>Listing ID : {{list.id}}&nbsp;&nbsp;|&nbsp;&nbsp;Created : {{list.create_time}}</small><br>
+                    <div class="watchlist-div">
+                        <span><a href="#" class="watch">Add to watchlist</a></span>&emsp;|&emsp;<img src="{% static 'auctions/Images/eye.png' %}" height="8em">&ensp;<span class="watch">25 watchers</span>
+                    </div>
+                    <br>
                     Current bid : &nbsp;<span class="price">US ${{list.current_bid}}</span><br>
                     <small>You are the highest bidder.</small>
                     <form action="#" class="bid-form">
-                        <input type="number" step="0.1" min="{{list.current_bid}}" value="{{bid | default:''}}">
+                        <input type="number" step="0.1" value="{{bid | default:''}}">
                         <input type="submit" class="btn" value="Place Bid">
                         &nbsp;&nbsp;&nbsp;
                         {% if success %}

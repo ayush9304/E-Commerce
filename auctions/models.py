@@ -20,7 +20,7 @@ class Listing(models.Model):
 
 class UserBid(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    max_bid = models.FloatField()
+    bid = models.FloatField()
 
 class UserComment(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")

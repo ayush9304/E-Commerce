@@ -208,3 +208,10 @@ body {
     font-size: 14px;
     margin-left: 20px;
 }
+
+.watchlist-div{
+    box-sizing: border-box;
+    float: right;
+    font-size: 15px;
+    padding-right: 6em;
+}
