@@ -1,0 +1,45 @@
+{% extends 'auctions/layout.html' %}
+
+{% load static %}
+
+{% block body %}
+    <div class="container">
+        <div class="listing-upper">
+            <div class="listing-left">
+                <center>
+                    <img src="{% static list.image %}">
+                </center>
+            </div>
+            <div class="listing-right">
+                <div class="top">
+                    <h4>{{list.title}}</h4>
+                    <small>Listing ID : {{list.id}}&nbsp;&nbsp;|&nbsp;&nbsp;Created : {{list.create_time}}</small><br><br>
+                    Current bid : &nbsp;<span class="price">US ${{list.current_bid}}</span><br>
+                    <small>You are the highest bidder.</small>
+                    <form action="#" class="bid-form">
+                        <input type="number" step="0.1" min="{{list.current_bid}}" value="{{bid | default:''}}">
+                        <input type="submit" class="btn" value="Place Bid">
+                        &nbsp;&nbsp;&nbsp;
+                        {% if success %}
+                            <span class="star">{{bid_message}}</span>
+                        {% else %}
+                            <span style="color: limegreen ">{{bid_message}}</span>
+                        {% endif %}
+                    </form>
+                    <small>3 bid(s) so far.</small>
+                    <br><br>
+                    <h6>Details</h6>
+                    <ul>
+                        <li>Condition : {{list.condition}}</li>
+                        <li>Category : {{list.category}}</li>
+                        <li>Created by : {{creater}}</li>
+                    </ul><br>
+                    <h6>Description</h6>
+                    <p id="listing-description">{{list.description}}</p>
+                </div>
+                <div class="bottom"></div>
+            </div>
+        </div>
+        <div class="listing-lower"></div>
+    </div>
+{% endblock %}

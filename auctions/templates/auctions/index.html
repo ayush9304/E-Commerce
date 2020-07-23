@@ -4,65 +4,41 @@
 
 {% block body %}
     <div class="container">
-        <h2>Active Listings</h2>
+        {% if search_result %}
+            {% if count %}
+                <h2>{{search_result}}</h2>
+            {% endif %}
+        {% else %}
+            <h2>Active Listings</h2>
+        {% endif %}
         <div class="list">
-            <div class="list-item">
-                <div class="left">
-                    <center>
-                        <a href="#">
-                            <img src="{% static 'auctions/Images/Listings/oneplus.png' %}">
+            {% for list in listings %}
+                <div class="list-item">
+                    <div class="left">
+                        <center>
+                            <a href="{% url 'listing' list.id %}">
+                                <img src="{% static list.image %}">
+                            </a>
+                        </center>
+                    </div>
+                    <div class="right">
+                        <a href="{% url 'listing' list.id %}">
+                            <h5>{{list.title}}</h5>
                         </a>
-                    </center>
+                        <small>Listing ID: {{list.id}}</small><br>
+                        Price: &nbsp;<span class="price">US ${{list.current_bid}}</span><br>
+                        <span class="create-time">Created: {{list.create_time}}</span><br>
+                        <img src="{% static 'auctions/Images/eye.png' %}" height="8em">&nbsp;<span class="watch">25 watchers</span>
+                    </div>
                 </div>
-                <div class="right">
-                    <a href="#">
-                        <h5>OnePlus 7T (Glacier Blue, 8GB RAM, Fluid AMOLED Display, 256GB Storage, 3800mAH Battery)</h5>
-                    </a>
-                    Listing ID: 1412682<br>
-                    Price: &nbsp;<span class="price">USD $399.00</span><br>
-                    <span class="create-time">Created Feb. 22, 2020, 6:55 p.m</span><br>
-                    <img src="{% static 'auctions/Images/eye.png' %}" height="8em">&nbsp;<span class="watch">25 watchers</span>
-                </div>
-            </div>
-            <hr>
-            <div class="list-item">
-                <div class="left">
-                    <center>
-                        <a href="#">
-                            <img src="{% static 'auctions/Images/Listings/samsung.png' %}">
-                        </a>
-                    </center>
-                </div>
-                <div class="right">
-                    <a href="#">
-                        <h5>Samsung Galaxy A20s A207M/DS, 32GB/3GB RAM Dual SIM 6.5''HD+ Snapdragon 450, Factory Unlocked (International Version) - (Red)</h5>
-                    </a>
-                    Listing ID: 1412683<br>
-                    Price: &nbsp;<span class="price">USD $169.00</span><br>
-                    <span class="create-time">Created Feb. 22, 2020, 6:55 p.m</span><br>
-                    <img src="{% static 'auctions/Images/eye.png' %}" height="8em">&nbsp;<span class="watch">62 watchers</span>
-                </div>
-            </div>
-            <hr>
-            <div class="list-item">
-                <div class="left">
-                    <center>
-                        <a href="#">
-                            <img src="{% static 'auctions/Images/Listings/apple.png' %}">
-                        </a>
-                    </center>
-                </div>
-                <div class="right">
-                    <a href="#">
-                        <h5>Apple iPhone 11 Pro, 64GB, Midnight Green - Fully Unlocked (Renewed)</h5>
-                    </a>
-                    Listing ID: 1412684<br>
-                    Price: &nbsp;<span class="price">USD $950.00</span><br>
-                    <span class="create-time">Created Feb. 22, 2020, 6:55 p.m</span><br>
-                    <img src="{% static 'auctions/Images/eye.png' %}" height="8em">&nbsp;<span class="watch">17 watchers</span>
-                </div>
-            </div>
-            <hr>
+                <hr>
+            {% empty %}
+                <center>
+                    <br>
+                    <h4>Sorry, no results found!</h4>
+                    Please check the spelling or try searching for something else
+                </center>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

@@ -21,7 +21,7 @@ body {
 .right-nav input[type=text]:focus{
     outline: none;
     box-shadow: inset 0 0 2.5px #59c65b;
-    transition-duration: 200ms;
+    transition-duration: 100ms;
 }
 .right-nav ::placeholder{
     color: #59c65b;
@@ -64,14 +64,17 @@ body {
     margin-top: 30px;
 }
 
+/*
 .list > div{
-    margin-bottom: 10px;
-    height: 13em;
-    width: 100%;
+    
 }
+*/
 .list-item{
     display: flex;
     box-sizing: border-box;
+    margin-bottom: 10px;
+    height: 13em;
+    width: 100%;
 }
 .list-item > .left{
     width: 30%;
@@ -88,7 +91,7 @@ body {
     max-width: 100%;
 }
 
-.list-item > .right .price{
+.price{
     font-size: 1.2em;
     font-weight: 500;
     line-height: 2em;
@@ -101,4 +104,107 @@ body {
 
 .list-item > .right .watch{
     font-size: .8em;
+}
+
+.c_form{
+    margin: 0px 10px 0px 10px
+}
+.c_form input[type=text]{
+    width: 20em;
+}
+
+.c_row{
+    width: 100%;
+    display: flex;
+    margin-top: 8px;
+}
+
+.c_row_btn{
+    margin-top: 12px;
+}
+
+.row-left{
+    width: 22%;
+}
+
+.row-right{
+    width: 73%;
+}
+
+.star{
+    color: red;
+}
+
+.create-btn{
+    background-color: #59c65b;
+    color: white;
+    padding: .25em 2em .3em 2em;
+    height: 35px;
+}
+
+.create-btn:hover{
+    color: white;
+}
+
+.create-btn:focus{
+    background-color: #4aba4c;
+}
+
+#cancel{
+    color: grey;
+    background-color: white;
+    border: 1px solid grey;
+}
+#cancel:hover{
+    color: dimgray;
+    border: 1px solid dimgray;
+}
+
+.listing-upper{
+    width: 100%;
+    height: 24.5em;
+    display: flex;
+    box-sizing: border-box;
+    margin-top: 30px;
+}
+
+.listing-upper > .listing-left{
+    width: 30%;
+    padding: 5px;
+}
+
+.listing-upper > .listing-right{
+    width: 70%;
+    padding: 15px 10px 10px 50px;
+    line-height: 1.5em;
+}
+
+.listing-upper > .listing-left img{
+    height: 24em;
+    max-width: 100%;
+}
+
+.bid-form{
+    margin-top: 8px;
+}
+
+.bid-form > input[type=submit]{
+    background-color: #59c65b;
+    color: white;
+    height: 30px;
+    padding: 0px 15px 0px 15px;
+    margin-top: -5px;
+}
+
+.bid-form > input[type=submit]:hover{
+    color: white;
+}
+
+.bid-form > input[type=submit]:focus{
+    background-color: #4aba4c;
+}
+
+#listing-description{
+    font-size: 14px;
+    margin-left: 20px;
 }

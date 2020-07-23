@@ -1,0 +1,93 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    <div class="container">
+        <h2>Create Listing</h2>
+        <form action="{% url 'create' %}" method="POST">
+            <div class="c_form">
+                {% csrf_token %}
+                <div class="c_row">
+                    <div class="row-left">
+                        <label for="title">Title <span class="star">*</span></label>
+                    </div>
+                    <div class="row-right">
+                        <input type="text" name="title" required="required">
+                    </div>
+                </div>
+                <div class="c_row">
+                    <div class="row-left">
+                        <label for="category">Category</label>
+                    </div>
+                    <div class="row-right">
+                        <select name="category">
+                            <option disabled selected value>-- Select an option --</option>
+                            <option value="Motors">Motors</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Books, Movies & Music">Books, Movies & Music</option>
+                            <option value="Collectibles & Art">Collectibles & Art</option>
+                            <option value="Home & Garden">Home & Garden</option>
+                            <option value="Sporting Goods">Sporting Goods</option>
+                            <option value="Toys & Hobbies">Toys & Hobbies</option>
+                            <option value="Business & Industrial">Business & Industrial</option>
+                            <option value="Health & Beauty">Health & Beauty</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="c_row">
+                    <div class="row-left">
+                        <label for="condition">Condition <span class="star">*</span></label>
+                    </div>
+                    <div class="row-right">
+                        <select name="condition" required="required">
+                            <option disabled selected value>-- Select an option --</option>
+                            <option value="New">New</option>
+                            <option value="Used">Used</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="c_row">
+                    <div class="row-left">
+                        <label for="description">Description <span class="star">*</span></label>
+                    </div>
+                    <div class="row-right">
+                        <textarea name="description" cols="70" rows="5" required="required" placeholder="Add description here.."></textarea>
+                    </div>
+                </div>
+                <div class="c_row">
+                    <div class="row-left">
+                        <label for="image">Image URL</label>
+                    </div>
+                    <div class="row-right">
+                        <input type="text" name="image" placeholder="auctions/Images/Listings/image.png">
+                    </div>
+                </div>
+                <div class="c_row">
+                    <div class="row-left">
+                        <label for="s_bid">Starting Bid (USD) <span class="star">*</span></label>
+                    </div>
+                    <div class="row-right">
+                        <input type="number" step="0.1" min="1.00" name="s_bid" required="required">
+                    </div>
+                </div>
+                <div class="c_row">
+                    <div class="row-left">
+                        <label for="bid_i">Bid Increment (USD) <span class="star">*</span></label>
+                    </div>
+                    <div class="row-right">
+                        <input type="number" step="0.1" min="1.00" name="bid_i">
+                    </div>
+                </div>
+                <div class="c_row">
+                    <div class="row-left"></div>
+                    <div class="row-right">
+                        <input type="submit" value="Create" class="btn create-btn">
+                        &nbsp;
+                        <a href="{% url 'index' %}" class="btn create-btn" id="cancel">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
