@@ -105,7 +105,40 @@ def search(request):
 
 def listing(request, id):
     list_item = Listing.objects.get(id=id)
+    watchlist = ""
+    watchers_count = Listing.objects.get(id=id).watchers.count()
+    if request.user.is_authenticated:
+        watchlist = request.user.watchlist.filter(id=id).first
     return render(request, "auctions/listing.html", {
         "list":list_item,
-        "creater":list_item.creater.get()
+        "creater":list_item.creater.get(),
+        "watchlist":watchlist,
+        "watchers_count":watchers_count
     })
+
+def add_watchlist(request, id):
+    if request.user.is_authenticated:
+        list_item = Listing.objects.get(id=id)
+        try:
+            request.user.watchlist.add(list_item)
+        except:
+            return render(request, "auctions/message.html", {
+                "message":"There was an error while adding to watchlist"
+            })
+        return HttpResponseRedirect(reverse("listing", args=[id]))
+    else:
+        return HttpResponseRedirect(reverse("login"))
+
+def remove_watchlist(request, id):
+    if request.user.is_authenticated:
+        list_item = Listing.objects.get(id=id)
+        try:
+            watchlist = request.user.watchlist.get(id__contains=id)
+            request.user.watchlist.remove(watchlist)
+        except:
+            return render(request, "auctions/message.html", {
+                "message":"There was an error while removing from watchlist"
+            })
+        return HttpResponseRedirect(reverse("listing", args=[id]))
+    else:
+        return HttpResponseRedirect(reverse("login"))

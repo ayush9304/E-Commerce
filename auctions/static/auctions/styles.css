@@ -210,8 +210,11 @@ body {
 }
 
 .watchlist-div{
+    line-height: 10px;
     box-sizing: border-box;
     float: right;
-    font-size: 15px;
     padding-right: 6em;
+}
+.watchlist-div img{
+    vertical-align: middle;
 }

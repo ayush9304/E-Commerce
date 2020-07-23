@@ -15,7 +15,13 @@
                     <h4>{{list.title}}</h4>
                     <small>Listing ID : {{list.id}}&nbsp;&nbsp;|&nbsp;&nbsp;Created : {{list.create_time}}</small><br>
                     <div class="watchlist-div">
-                        <span><a href="#" class="watch">Add to watchlist</a></span>&emsp;|&emsp;<img src="{% static 'auctions/Images/eye.png' %}" height="8em">&ensp;<span class="watch">25 watchers</span>
+                        <span>
+                            {% if watchlist %}
+                                <a href="{% url 'remove_watchlist' list.id %}" class="watch"><span style="font-weight: bolder;">&#10003;</span> Added to watchlist</a>
+                            {% else %}
+                                <a href="{% url 'add_watchlist' list.id %}" class="watch">&#10010; Add to watchlist</a>
+                            {% endif %}
+                        </span>&emsp;|&emsp;<img src="{% static 'auctions/Images/eye.png' %}" height="8em">&ensp;<span class="watch">{{watchers_count}} watcher(s)</span>
                     </div>
                     <br>
                     Current bid : &nbsp;<span class="price">US ${{list.current_bid}}</span><br>
