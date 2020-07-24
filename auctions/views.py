@@ -123,6 +123,7 @@ def watchlist(request):
             "result_title":"Watchlist",
             "listings":reversed(listings),
         })
+    return HttpResponseRedirect(reverse("login"))
 
 def add_watchlist(request, id):
     if request.user.is_authenticated:
@@ -137,7 +138,7 @@ def add_watchlist(request, id):
     else:
         return HttpResponseRedirect(reverse("login"))
 
-def remove_watchlist(request, id, origin_page):
+def remove_watchlist(request, id):
     if request.user.is_authenticated:
         list_item = Listing.objects.get(id=id)
         try:
@@ -147,9 +148,6 @@ def remove_watchlist(request, id, origin_page):
             return render(request, "auctions/message.html", {
                 "message":"There was an error while removing from watchlist"
             })
-        if origin_page == "watchlist":
-            return HttpResponseRedirect(reverse("wishlist"))
-        elif origin_page == "listing":
-            return HttpResponseRedirect(reverse("listing", args=[id]))
+        return HttpResponseRedirect(reverse("watchlist"))
     else:
         return HttpResponseRedirect(reverse("login"))

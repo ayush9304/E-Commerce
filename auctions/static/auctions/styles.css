@@ -81,14 +81,15 @@ body {
     padding: 5px;
 }
 .list-item > .right{
-    width: 70%;
+    width: 64%;
     padding: 10px 10px 10px 25px;
     line-height: 1.5em;
 }
 
 .list-item > .far-right_watchlist{
-    width: 3%;
+    padding-top: 12px;
     margin-right: 0px;
+    margin-left: auto;
 }
 .far-right_watchlist a:hover{
     color: #cb2431;

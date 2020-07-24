@@ -17,7 +17,7 @@
                     <div class="watchlist-div">
                         <span>
                             {% if watchlist %}
-                                <a href="{% url 'remove_watchlist' id=list.id origin_page='listing' %}" class="watch"><span style="font-weight: bolder;">&#10003;</span> Added to watchlist</a>
+                                <a href="{% url 'watchlist' %}" class="watch" title="Watchlist"><span style="font-weight: bolder;">&#10003;</span> Added to watchlist</a>
                             {% else %}
                                 <a href="{% url 'add_watchlist' list.id %}" class="watch">&#10010; Add to watchlist</a>
                             {% endif %}
