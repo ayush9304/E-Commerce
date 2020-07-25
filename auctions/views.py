@@ -110,20 +110,17 @@ def listing(request, id, status="None"):
     watchers_count = list_item.watchers.count()
     no_of_bids = UserBid.objects.filter(listing=list_item).count()
     bids = UserBid.objects.filter(listing=list_item).all()
-    bidders = []
-    ###################################
-    for bid in bids:
-        bidders.append(bid.bidder.get())
-    ###################################
     if request.user.is_authenticated:
-        watchlist = request.user.watchlist.filter(id=id).first
+        watchlist = request.user.watchlist.filter(id=id).first()
+    bids = UserBid.objects.filter(listing=list_item).all()
     if status == "None":
         return render(request, "auctions/listing.html", {
             "list":list_item,
             "creater":list_item.creater.get(),
             "watchlist":watchlist,
             "watchers_count":watchers_count,
-            "no_of_bids":no_of_bids
+            "no_of_bids":no_of_bids,
+            "bids":reversed(bids)
         })
     elif status == "success":
         return render(request, "auctions/listing.html", {
@@ -132,6 +129,7 @@ def listing(request, id, status="None"):
             "watchlist":watchlist,
             "watchers_count":watchers_count,
             "no_of_bids":no_of_bids,
+            "bids":reversed(bids),
             "success":True,
             "bid_message":"Congratulations! You have successfully placed your bid."
         })
@@ -142,6 +140,7 @@ def listing(request, id, status="None"):
             "watchlist":watchlist,
             "watchers_count":watchers_count,
             "no_of_bids":no_of_bids,
+            "bids":reversed(bids),
             "success":False,
             "bid_message":"There was an error whilr placing your bid."
         })
@@ -212,8 +211,11 @@ def place_bid(request, id):
                     if bid_amount >= list_item.starting_bid:
                         list_item.current_bid = bid_amount
                         list_item.save()
-                        user_bid = UserBid.objects.create(listing=list_item, bid=bid_amount, time=bid_time)
-                        request.user.bids.add(user_bid)
+                        user_bid = UserBid.objects.create(bidder=request.user, bid=bid_amount, time=bid_time)
+                        user_bid.listing.add(list_item)
+                        ####user_bid.bidder.add(request.user)
+                        user_bid.save()
+                        #request.user.bids.add(user_bid)
                         return HttpResponseRedirect(reverse("bid_result", kwargs={
                             "id":list_id,
                             "status":"success"
@@ -227,8 +229,11 @@ def place_bid(request, id):
                     if bid_amount > list_item.current_bid:
                         list_item.current_bid = bid_amount
                         list_item.save()
-                        user_bid = UserBid.objects.create(listing=list_item, bid=bid_amount, time=bid_time)
-                        request.user.bids.add(user_bid)
+                        user_bid = UserBid.objects.create(bidder=request.user, bid=bid_amount, time=bid_time)
+                        user_bid.listing.add(list_item)
+                        ####user_bid.bidder.add(request.user)
+                        user_bid.save()
+                        #request.user.bids.add(user_bid)
                         return HttpResponseRedirect(reverse("bid_result", kwargs={
                             "id":list_id,
                             "status":"success"

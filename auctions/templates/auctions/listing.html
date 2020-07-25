@@ -74,7 +74,7 @@
                                     {% endif %}
                                     <input type="submit" class="btn" value="Place Bid">
                                 {% endif %}
-                                &nbsp;&nbsp;&nbsp;
+                                &nbsp;&nbsp;
                                 {% if success %}
                                     <span style="color: limegreen ">{{bid_message}}</span>
                                 {% else %}
@@ -97,28 +97,35 @@
                             </div>
                         {% endif %}
                     </div>
-                    <h6>Description</h6>
-                    <p id="listing-description">{{list.description}}</p>
                 </div>
-                <div class="bottom"></div>
             </div>
         </div>
+        <div class="listing-middle">
+            <h5>Description</h5>
+            <p id="listing-description">{{list.description}}</p>
+        </div>
         <div class="listing-lower">
-            <h5>Bid History</h5>
-            <table>
-                <th>
-                    <td>Bidder</td>
-                    <td>Bid Amount</td>
-                    <td>Bid Time</td>
-                </th>
-                {% for bid in bids %}
-                    <tr>
-                        <td>{{bid.bidder}}</td>
-                        <td>US ${{bid.bid}}</td>
-                        <td>{{bid.time}}</td>
-                    </tr>
-                {% endfor %}
-            </table>
+            {% if bids %}
+                <h3>Bid History</h3><br>
+                    <div class="bids-div">
+                        <ul class="responsive-table">
+                            <li class="table-header">
+                                <div class="col col-1">Bid Id</div>
+                                <div class="col col-2">Bidder</div>
+                                <div class="col col-3">Bid Amount</div>
+                                <div class="col col-4">Bid Time</div>
+                            </li>
+                            {% for bid in bids %}
+                                <li class="table-row">
+                                    <div class="col col-1" data-label="Bid Id">{{bid.id}}</div>
+                                    <div class="col col-2" data-label="Bidder">{{bid.bidder}}</div>
+                                    <div class="col col-3" data-label="Bid Amount">US ${{bid.bid}}</div>
+                                    <div class="col col-4" data-label="Bid Time">{{bid.time}}</div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
