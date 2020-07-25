@@ -109,6 +109,12 @@ def listing(request, id, status="None"):
     watchlist = ""
     watchers_count = list_item.watchers.count()
     no_of_bids = UserBid.objects.filter(listing=list_item).count()
+    bids = UserBid.objects.filter(listing=list_item).all()
+    bidders = []
+    ###################################
+    for bid in bids:
+        bidders.append(bid.bidder.get())
+    ###################################
     if request.user.is_authenticated:
         watchlist = request.user.watchlist.filter(id=id).first
     if status == "None":
@@ -162,7 +168,6 @@ def add_watchlist(request):
                 return render(request, "auctions/message.html", {
                     "message":f"There was an error while adding to watchlist : {e}"
                 })
-            #return HttpResponseRedirect(reverse("listing", args=[id]))
             return HttpResponseRedirect(origin)
         else:
             return HttpResponseRedirect(reverse("login"))
@@ -180,7 +185,6 @@ def remove_watchlist(request):
                 return render(request, "auctions/message.html", {
                     "message":f"There was an error while removing from watchlist : {e}"
                 })
-            #return HttpResponseRedirect(reverse("watchlist"))
             return HttpResponseRedirect(origin)
         else:
             return HttpResponseRedirect(reverse("login"))
@@ -202,46 +206,19 @@ def place_bid(request, id):
             bid_amount = float(request.POST['bid'])
             list_id = request.POST.get('id')
             list_item = Listing.objects.get(id=list_id)
-            #####watchers_count = list_item.watchers.count()
+            bid_time = datetime.now()
             try:
                 if list_item.current_bid == list_item.starting_bid:
                     if bid_amount >= list_item.starting_bid:
-                        #######################################################
-                        #request.user.bids.create(listing=list_item, bid=bid_amount)
                         list_item.current_bid = bid_amount
                         list_item.save()
-                        user_bid = UserBid.objects.create(listing=list_item, bid=bid_amount)
+                        user_bid = UserBid.objects.create(listing=list_item, bid=bid_amount, time=bid_time)
                         request.user.bids.add(user_bid)
-
-                        #return render(request, "auctions/listing.html", {
-                        #    "id":list_id,
-                        #    "success":True,
-                        #    "bid_message":"Congratulations! You have successfully placed your bid."
-                        #})
-                        ####return render(request, "auctions/listing.html", {
-                        ####    "list":list_item,
-                        ####    "creater":list_item.creater.get(),
-                        ####    "watchers_count":watchers_count,
-                        ####    "success":True,
-                        ####    "bid_message":"Congratulations! You have successfully placed your bid."
-                        ####    })
                         return HttpResponseRedirect(reverse("bid_result", kwargs={
                             "id":list_id,
                             "status":"success"
                         }))
                     else:
-                        #return render(request, "auctions/listing.html", {
-                        #    "list":list_item,
-                        #    "success":False,
-                        #    "bid_message":"Please enter bid amount greater then {list_item.current_bid}"
-                        #})
-                        ####return render(request, "auctions/listing.html", {
-                        ####    "list":list_item,
-                        ####    "creater":list_item.creater.get(),
-                        ####    "watchers_count":watchers_count,
-                        ####    "success":False,
-                        ####    "bid_message":f"Please enter bid amount greater then {list_item.current_bid}"
-                        ####    })
                             return HttpResponseRedirect(reverse("bid_result", kwargs={
                             "id":list_id,
                             "status":"failed"
@@ -250,36 +227,13 @@ def place_bid(request, id):
                     if bid_amount > list_item.current_bid:
                         list_item.current_bid = bid_amount
                         list_item.save()
-                        user_bid = UserBid.objects.create(listing=list_item, bid=bid_amount)
+                        user_bid = UserBid.objects.create(listing=list_item, bid=bid_amount, time=bid_time)
                         request.user.bids.add(user_bid)
-                        #return render(request, "auctions/listing.html", {
-                        #    "list":list_item,
-                        #    "success":True,
-                        #    "bid_message":"Congratulations! You have successfully placed your bid."
-                        #})
-                        ####return render(request, "auctions/listing.html", {
-                        ####    "list":list_item,
-                        ####    "creater":list_item.creater.get(),
-                        ####    "watchers_count":watchers_count,
-                        ####    "success":True,
-                        ####    "bid_message":"Congratulations! You have successfully placed your bid."
-                        ####    })
                         return HttpResponseRedirect(reverse("bid_result", kwargs={
                             "id":list_id,
                             "status":"success"
                             }))
                     else:
-                        #return render(request, "auctions/listing.html", {
-                        #    "list":list_item,
-                        #    
-                        #})
-                        ####return render(request, "auctions/listing.html", {
-                        ####    "list":list_item,
-                        ####    "creater":list_item.creater.get(),
-                        ####    "watchers_count":watchers_count,
-                        ####    "success":False,
-                        ####    "bid_message":f"Please enter bid amount greater then {list_item.current_bid}"
-                        ####    })
                         return HttpResponseRedirect(reverse("bid_result", kwargs={
                             "id":list_id,
                             "status":"failed"

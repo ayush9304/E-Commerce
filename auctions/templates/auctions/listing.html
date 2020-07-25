@@ -103,6 +103,22 @@
                 <div class="bottom"></div>
             </div>
         </div>
-        <div class="listing-lower"></div>
+        <div class="listing-lower">
+            <h5>Bid History</h5>
+            <table>
+                <th>
+                    <td>Bidder</td>
+                    <td>Bid Amount</td>
+                    <td>Bid Time</td>
+                </th>
+                {% for bid in bids %}
+                    <tr>
+                        <td>{{bid.bidder}}</td>
+                        <td>US ${{bid.bid}}</td>
+                        <td>{{bid.time}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 {% endblock %}

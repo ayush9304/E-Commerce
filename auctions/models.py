@@ -17,15 +17,16 @@ class Listing(models.Model):
 
     def __str__(self):
         return f"(ID: {self.id}) {self.title}"
-
+    
 
 class UserBid(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
     bid = models.FloatField()
-    
+    time = models.DateTimeField(datetime.now)
+
     def __str__(self):
-        return f"(Bid ID {self.id}) {self.listing} : US ${self.bid}"
-    
+        return f"(Bid ID {self.id}) [{self.listing}] : US ${self.bid} {self.time}"
+
 
 class UserComment(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
@@ -38,7 +39,7 @@ class UserComment(models.Model):
 class User(AbstractUser):
     watchlist = models.ManyToManyField(Listing, blank=True, related_name="watchers")
     listing = models.ManyToManyField(Listing, blank=True, related_name="creater")
-    bids = models.ManyToManyField(UserBid, blank=True, related_name="bidders")
+    bids = models.ManyToManyField(UserBid, blank=True, related_name="bidder")
     comments = models.ManyToManyField(UserComment, blank=True, related_name="commenter")
 
     def __str__(self):

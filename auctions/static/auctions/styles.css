@@ -181,16 +181,15 @@ body {
 
 .listing-upper{
     width: 100%;
-    height: 24.5em;
     display: flex;
     box-sizing: border-box;
     margin-top: 30px;
 }
 
 .listing-upper > .listing-left{
-    width: 30%;
+    width:28%;
+    height: 24.5em;
     padding: 5px;
-    width: 250px;
     position: relative;
 }
 
@@ -209,6 +208,10 @@ body {
     left: 0;  
     right: 0;  
     margin: auto;
+}
+
+.listing-lower{
+    margin-top: 2em;
 }
 
 .bid-form{
