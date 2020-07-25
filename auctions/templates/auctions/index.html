@@ -20,13 +20,28 @@
                         </center>
                     </div>
                     <div class="right">
-                        <a href="{% url 'listing' list.id %}">
-                            <h5>{{list.title}}</h5>
-                        </a>
-                        <small>Listing ID: {{list.id}}</small><br>
-                        Price: &nbsp;<span class="price">US ${{list.current_bid}}</span><br>
-                        <small>Condition :&nbsp;{{list.condition}}</small><br>
-                        <span class="create-time">Created: {{list.create_time}}</span><br>
+                        <div class="right-top">
+                            <a href="{% url 'listing' list.id %}">
+                                <h5>{{list.title}}</h5>
+                            </a>
+                        </div>
+                        <div class="right-bottom">
+                            <div class="right-bottom-left">
+                                <small>Listing ID: {{list.id}}</small><br>
+                                Price: &nbsp;<span class="price">US ${{list.current_bid}}</span><br>
+                                <small>Condition :&nbsp;{{list.condition}}</small><br>
+                                <span class="create-time">Created: {{list.create_time}}</span><br>
+                            </div>
+                            <div class="right-bottom-right">
+                                {% if creater %}
+                                    {% if list.status == "sold"%}
+                                        <img src="{% static 'auctions/Images/sold.png' %}">
+                                    {% elif list.status == "active" %}
+                                        <!--<img src="{% static 'auctions/Images/active.png' %}">-->
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                     {% if result_title == "Watchlist" %}
                         <div class="far-right_watchlist">

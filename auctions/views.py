@@ -10,7 +10,7 @@ from datetime import datetime
 
 
 def index(request):
-    listings = Listing.objects.all()
+    listings = Listing.objects.filter(status="active").all()
     return render(request, "auctions/index.html", {
         "listings":reversed(listings)
     })
@@ -166,7 +166,8 @@ def my_listing(request):
         listings = request.user.listing.all()
         return render(request, "auctions/index.html", {
             "listings":reversed(listings),
-            "result_title":"My Listings"
+            "result_title":"My Listings",
+            "creater":True
         })
     else:
         return HttpResponseRedirect(reverse("login"))

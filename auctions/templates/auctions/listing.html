@@ -14,6 +14,9 @@
                 <div class="top">
                     <h4>{{list.title}}</h4>
                     <small>Listing ID : {{list.id}}&nbsp;&nbsp;|&nbsp;&nbsp;Created : {{list.create_time}}</small><br>
+
+
+
                     <div class="watchlist-div">
                         <div>
                             <span>
@@ -45,28 +48,46 @@
                             &ensp;<span class="watch">{{watchers_count}} watcher(s)</span>
                         </div>
                     </div>
-                    <br>
-                    Current bid : &nbsp;<span class="price">US ${{list.current_bid}}</span><br>
-                    <small>You are the highest bidder.</small>
-                    <form action="#" class="bid-form">
-                        {% csrf_token %}
-                        <input type="number" step="0.1" value="{{bid | default:''}}">
-                        <input type="submit" class="btn" value="Place Bid">
-                        &nbsp;&nbsp;&nbsp;
-                        {% if success %}
-                            <span class="star">{{bid_message}}</span>
-                        {% else %}
-                            <span style="color: limegreen ">{{bid_message}}</span>
+
+
+
+                    <div class="regular-div">
+                        <div class="info-div">
+                            <br>
+                            Current bid : &nbsp;<span class="price">US ${{list.current_bid}}</span><br>
+                            <small>You are the highest bidder.</small>
+                            <form action="#" class="bid-form">
+                                {% csrf_token %}
+                                {% if list.status == "sold" %}
+                                    <input type="number" step="0.1" value="{{bid | default:''}}" disabled>
+                                    <input type="submit" class="btn" value="Place Bid" disabled>
+                                {% else %}
+                                    <input type="number" step="0.1" value="{{bid | default:''}}">
+                                    <input type="submit" class="btn" value="Place Bid">
+                                {% endif %}
+                                &nbsp;&nbsp;&nbsp;
+                                {% if success %}
+                                    <span class="star">{{bid_message}}</span>
+                                {% else %}
+                                    <span style="color: limegreen ">{{bid_message}}</span>
+                                {% endif %}
+                            </form>
+                            <small>3 bid(s) so far.</small>
+                            <br><br>
+                            <h6>Details</h6>
+                            <ul>
+                                <li>Condition : {{list.condition}}</li>
+                                <li>Category : {{list.category}}</li>
+                                <li>Created by : {{creater}}</li>
+                                <li>Status : {{list.status}}</li>
+                            </ul><br>
+                        </div>
+                        {% if list.status == "sold" %}
+                            <div class="sold-div">
+                                <img src="{% static 'auctions/Images/sold.png' %}">
+                            </div>
                         {% endif %}
-                    </form>
-                    <small>3 bid(s) so far.</small>
-                    <br><br>
-                    <h6>Details</h6>
-                    <ul>
-                        <li>Condition : {{list.condition}}</li>
-                        <li>Category : {{list.category}}</li>
-                        <li>Created by : {{creater}}</li>
-                    </ul><br>
+                    </div>
                     <h6>Description</h6>
                     <p id="listing-description">{{list.description}}</p>
                 </div>

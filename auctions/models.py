@@ -12,6 +12,7 @@ class Listing(models.Model):
     starting_bid = models.FloatField()
     current_bid = models.FloatField()
     condition = models.CharField(max_length=5)
+    status = models.CharField(max_length=15)
     create_time = models.DateTimeField(datetime.now())
 
     def __str__(self):
