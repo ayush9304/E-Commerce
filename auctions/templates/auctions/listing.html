@@ -56,23 +56,32 @@
                             <br>
                             Current bid : &nbsp;<span class="price">US ${{list.current_bid}}</span><br>
                             <small>You are the highest bidder.</small>
-                            <form action="#" class="bid-form">
+                            <form action="{% url 'place_bid' list.id %}" class="bid-form" method="POST">
                                 {% csrf_token %}
+                                <input type="hidden" name="id" value="{{list.id}}">
                                 {% if list.status == "sold" %}
-                                    <input type="number" step="0.1" value="{{bid | default:''}}" disabled>
+                                    {% if list.starting_bid == list.current_bid %}
+                                        <input type="number" name="bid" min="{{list.starting_bid}}" disabled>
+                                    {% elif list.starting_bid < list.current_bid %}
+                                        <input type="number" name="bid" min="{{list.current_bid | add:'1'}}" disabled>
+                                    {% endif %}
                                     <input type="submit" class="btn" value="Place Bid" disabled>
                                 {% else %}
-                                    <input type="number" step="0.1" value="{{bid | default:''}}">
+                                    {% if list.starting_bid == list.current_bid %}
+                                        <input type="number" name="bid" min="{{list.starting_bid}}">
+                                    {% elif list.starting_bid < list.current_bid %}
+                                        <input type="number" name="bid" min="{{list.current_bid | add:'1'}}">
+                                    {% endif %}
                                     <input type="submit" class="btn" value="Place Bid">
                                 {% endif %}
                                 &nbsp;&nbsp;&nbsp;
                                 {% if success %}
-                                    <span class="star">{{bid_message}}</span>
-                                {% else %}
                                     <span style="color: limegreen ">{{bid_message}}</span>
+                                {% else %}
+                                    <span class="star">{{bid_message}}</span>
                                 {% endif %}
                             </form>
-                            <small>3 bid(s) so far.</small>
+                            <small>{{no_of_bids}} bid(s) so far.</small>
                             <br><br>
                             <h6>Details</h6>
                             <ul>

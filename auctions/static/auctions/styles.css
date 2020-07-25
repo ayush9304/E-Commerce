@@ -267,12 +267,12 @@ body {
 
 .sold-div{
     padding: 5px;
-    width: 10em;
+    width: 12em;
     position: relative;
     margin-right: 0px;
 }
 .sold-div img{
-    max-height: 24em;
+    max-height: 100%;
     max-width: 100%; 
     position: absolute;  
     top: 0;  

@@ -33,12 +33,10 @@
                                 <span class="create-time">Created: {{list.create_time}}</span><br>
                             </div>
                             <div class="right-bottom-right">
-                                {% if creater %}
-                                    {% if list.status == "sold"%}
-                                        <img src="{% static 'auctions/Images/sold.png' %}">
-                                    {% elif list.status == "active" %}
-                                        <!--<img src="{% static 'auctions/Images/active.png' %}">-->
-                                    {% endif %}
+                                {% if list.status == "sold"%}
+                                    <img src="{% static 'auctions/Images/sold.png' %}">
+                                {% elif list.status == "active" %}
+                                    <!--<img src="{% static 'auctions/Images/active.png' %}">-->
                                 {% endif %}
                             </div>
                         </div>
