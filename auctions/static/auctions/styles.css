@@ -64,11 +64,6 @@ body {
     margin-top: 30px;
 }
 
-/*
-.list > div{
-    
-}
-*/
 .list-item{
     display: flex;
     box-sizing: border-box;
@@ -91,7 +86,7 @@ body {
     margin-right: 0px;
     margin-left: auto;
 }
-.far-right_watchlist a:hover{
+.far-right_watchlist button:hover{
     color: #cb2431;
 }
 
@@ -223,7 +218,26 @@ body {
     box-sizing: border-box;
     float: right;
     padding-right: 6em;
+    display: flex;
 }
 .watchlist-div img{
     vertical-align: middle;
+}
+
+.message-div{
+    margin-top: 75px;
+}
+
+.hid-btn{
+    border: none;
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}
+.hid-btn:hover{
+    color: #0056b3;
+    text-decoration: underline;
+}
+.hid-btn:focus{
+    outline: none;
 }

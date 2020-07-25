@@ -8,7 +8,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=130)
     description = models.TextField()
     image = models.CharField(max_length=1000, blank=True)
-    category = models.CharField(max_length=45, default="No Category Listed")
+    category = models.CharField(max_length=45, default='No category provided')
     starting_bid = models.FloatField()
     current_bid = models.FloatField()
     condition = models.CharField(max_length=5)

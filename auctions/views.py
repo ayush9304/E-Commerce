@@ -73,6 +73,8 @@ def create(request):
         description = request.POST.get('description')
         image = request.POST.get('image')
         category = request.POST.get('category')
+        if not category:
+            category = "Category not provided"
         s_bid = request.POST.get('s_bid')
         condition = request.POST.get('condition')
         c_time = datetime.now()
@@ -81,8 +83,8 @@ def create(request):
             user = User.objects.get(username=request.user.username)
             user.listing.add(listing_)
             return HttpResponseRedirect(reverse("index"))
-        except:
-            return HttpResponse("There was a error while creating the listing")
+        except Exception as e:
+            return HttpResponse(f"There was a error while creating the listing. : {e}")
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
     else:
@@ -99,8 +101,7 @@ def search(request):
     return render(request, "auctions/index.html", {
         "query":query,
         "result_title":f"Search result for '{query}'",
-        "listings":reversed(results),
-        "count": len(results)
+        "listings":reversed(results)
     })
 
 def listing(request, id):
@@ -125,29 +126,47 @@ def watchlist(request):
         })
     return HttpResponseRedirect(reverse("login"))
 
-def add_watchlist(request, id):
-    if request.user.is_authenticated:
-        list_item = Listing.objects.get(id=id)
-        try:
-            request.user.watchlist.add(list_item)
-        except:
-            return render(request, "auctions/message.html", {
-                "message":"There was an error while adding to watchlist"
-            })
-        return HttpResponseRedirect(reverse("listing", args=[id]))
-    else:
-        return HttpResponseRedirect(reverse("login"))
+def add_watchlist(request):
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            id = request.POST['id']
+            origin = request.POST['origin']
+            list_item = Listing.objects.get(id=id)
+            try:
+                request.user.watchlist.add(list_item)
+            except Exception as e:
+                return render(request, "auctions/message.html", {
+                    "message":f"There was an error while adding to watchlist : {e}"
+                })
+            #return HttpResponseRedirect(reverse("listing", args=[id]))
+            return HttpResponseRedirect(origin)
+        else:
+            return HttpResponseRedirect(reverse("login"))
 
-def remove_watchlist(request, id):
+def remove_watchlist(request):
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            id = request.POST['id']
+            origin = request.POST['origin']
+            list_item = Listing.objects.get(id=id)
+            try:
+                watchlist = request.user.watchlist.get(id__contains=id)
+                request.user.watchlist.remove(watchlist)
+            except Exception as e:
+                return render(request, "auctions/message.html", {
+                    "message":f"There was an error while removing from watchlist : {e}"
+                })
+            #return HttpResponseRedirect(reverse("watchlist"))
+            return HttpResponseRedirect(origin)
+        else:
+            return HttpResponseRedirect(reverse("login"))
+
+def my_listing(request):
     if request.user.is_authenticated:
-        list_item = Listing.objects.get(id=id)
-        try:
-            watchlist = request.user.watchlist.get(id__contains=id)
-            request.user.watchlist.remove(watchlist)
-        except:
-            return render(request, "auctions/message.html", {
-                "message":"There was an error while removing from watchlist"
-            })
-        return HttpResponseRedirect(reverse("watchlist"))
+        listings = request.user.listing.all()
+        return render(request, "auctions/index.html", {
+            "listings":reversed(listings),
+            "result_title":"My Listings"
+        })
     else:
         return HttpResponseRedirect(reverse("login"))
