@@ -59,20 +59,20 @@
                             <form action="{% url 'place_bid' list.id %}" class="bid-form" method="POST">
                                 {% csrf_token %}
                                 <input type="hidden" name="id" value="{{list.id}}">
-                                {% if list.status == "sold" %}
+                                {% if list.status == "active" %}
+                                    {% if list.starting_bid == list.current_bid %}
+                                        <input type="number" name="bid" min="{{list.starting_bid}}" required="required">
+                                    {% elif list.starting_bid < list.current_bid %}
+                                        <input type="number" name="bid" min="{{list.current_bid | add:'1'}}" required="required">
+                                    {% endif %}
+                                    <input type="submit" class="btn" value="Place Bid">
+                                {% else %}
                                     {% if list.starting_bid == list.current_bid %}
                                         <input type="number" name="bid" min="{{list.starting_bid}}" disabled>
                                     {% elif list.starting_bid < list.current_bid %}
                                         <input type="number" name="bid" min="{{list.current_bid | add:'1'}}" disabled>
                                     {% endif %}
                                     <input type="submit" class="btn" value="Place Bid" disabled>
-                                {% else %}
-                                    {% if list.starting_bid == list.current_bid %}
-                                        <input type="number" name="bid" min="{{list.starting_bid}}">
-                                    {% elif list.starting_bid < list.current_bid %}
-                                        <input type="number" name="bid" min="{{list.current_bid | add:'1'}}">
-                                    {% endif %}
-                                    <input type="submit" class="btn" value="Place Bid">
                                 {% endif %}
                                 &nbsp;&nbsp;
                                 {% if success %}
@@ -87,13 +87,17 @@
                             <ul>
                                 <li>Condition : {{list.condition}}</li>
                                 <li>Category : {{list.category}}</li>
-                                <li>Created by : {{creater}}</li>
+                                <li>Seller : {{creater}}</li>
                                 <li>Status : {{list.status}}</li>
                             </ul><br>
                         </div>
                         {% if list.status == "sold" %}
                             <div class="sold-div">
                                 <img src="{% static 'auctions/Images/sold.png' %}">
+                            </div>
+                        {% elif list.status == "unsold" %}
+                            <div class="sold-div">
+                                <img src="{% static 'auctions/Images/unsold.png' %}">
                             </div>
                         {% endif %}
                     </div>
@@ -106,25 +110,41 @@
         </div>
         <div class="listing-lower">
             {% if bids %}
-                <h3>Bid History</h3><br>
-                    <div class="bids-div">
-                        <ul class="responsive-table">
-                            <li class="table-header">
-                                <div class="col col-1">Bid Id</div>
-                                <div class="col col-2">Bidder</div>
-                                <div class="col col-3">Bid Amount</div>
-                                <div class="col col-4">Bid Time</div>
+                <h3>
+                    <form action="{% url 'auction_command' %}" method="POST">
+                        {% csrf_token %}
+                        Bid History&nbsp;&nbsp;
+                        <input type="hidden" value="{{list.id}}" name="id">
+                        {% if creater_view %}
+                            {% if list.status == "active" %}
+                                <button class="btn Btn end">End Auction</button>
+                            {% elif list.status == "sold" %}
+                                <button class="btn Btn end" disabled>End Auction</button>
+                            {% elif list.status == "unsold" %}
+                                <button class="btn Btn end">Start Auction</button>
+                            {% endif %}
+                        {% endif %}
+                    </form>
+                </h3>
+                <br>
+                <div class="bids-div">
+                    <ul class="responsive-table">
+                        <li class="table-header">
+                            <div class="col col-1">Bid Id</div>
+                            <div class="col col-2">Bidder</div>
+                            <div class="col col-3">Bid Amount</div>
+                            <div class="col col-4">Bid Time</div>
+                        </li>
+                        {% for bid in bids %}
+                            <li class="table-row">
+                                <div class="col col-1" data-label="Bid Id">{{bid.id}}</div>
+                                <div class="col col-2" data-label="Bidder">{{bid.bidder}}</div>
+                                <div class="col col-3" data-label="Bid Amount">US ${{bid.bid}}</div>
+                                <div class="col col-4" data-label="Bid Time">{{bid.time}}</div>
                             </li>
-                            {% for bid in bids %}
-                                <li class="table-row">
-                                    <div class="col col-1" data-label="Bid Id">{{bid.id}}</div>
-                                    <div class="col col-2" data-label="Bidder">{{bid.bidder}}</div>
-                                    <div class="col col-3" data-label="Bid Amount">US ${{bid.bid}}</div>
-                                    <div class="col col-4" data-label="Bid Time">{{bid.time}}</div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                        {% endfor %}
+                    </ul>
+                </div>
             {% endif %}
         </div>
     </div>

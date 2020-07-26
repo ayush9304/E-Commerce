@@ -31,6 +31,7 @@ class UserComment(models.Model):
 class User(AbstractUser):
     watchlist = models.ManyToManyField(Listing, blank=True, related_name="watchers")
     listing = models.ManyToManyField(Listing, blank=True, related_name="creater")
+    bought_items = models.ManyToManyField(Listing, blank=True, related_name="buyer")
     #bids = models.ManyToManyField(UserBid, blank=True, related_name="bidder")
     comments = models.ManyToManyField(UserComment, blank=True, related_name="commenter")
 

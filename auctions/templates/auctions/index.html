@@ -35,8 +35,8 @@
                             <div class="right-bottom-right">
                                 {% if list.status == "sold"%}
                                     <img src="{% static 'auctions/Images/sold.png' %}">
-                                {% elif list.status == "active" %}
-                                    <!--<img src="{% static 'auctions/Images/active.png' %}">-->
+                                {% elif list.status == "unsold" %}
+                                    <img src="{% static 'auctions/Images/unsold.png' %}">
                                 {% endif %}
                             </div>
                         </div>

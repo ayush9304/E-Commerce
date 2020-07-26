@@ -213,7 +213,7 @@ body {
 
 .listing-lower{
     margin-top: 2em;
-    margin-bottom: 2em;
+    margin-bottom: 5em;
 }
 
 .listing-lower table{
@@ -228,7 +228,7 @@ body {
     margin-top: 8px;
 }
 
-.bid-form > input[type=submit]{
+.bid-form > input[type=submit], .Btn{
     background-color: #59c65b;
     color: white;
     height: 30px;
@@ -236,11 +236,11 @@ body {
     margin-top: -5px;
 }
 
-.bid-form > input[type=submit]:hover{
+.bid-form > input[type=submit]:hover, .Btn:hover{
     color: white;
 }
 
-.bid-form > input[type=submit]:focus{
+.bid-form > input[type=submit]:focus, .Btn{
     background-color: #4aba4c;
 }
 
@@ -311,10 +311,10 @@ body {
 }
 .responsive-table li{
     border-radius: 3px;
-    padding: 15px 15px;
+    padding: 13px 15px;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 19px;
 }
 .table-header {
     background-color: #95A5A6;
@@ -334,8 +334,9 @@ body {
     flex-basis: 30%;
 }
 .col-3 {
-    flex-basis: 25%;
+    flex-basis: 23%;
 }
 .col-4 {
-    flex-basis: 30%;
+    flex-basis: 32%;
 }
+

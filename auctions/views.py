@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.db.models import Max
 
 from .models import Listing, UserBid, UserComment, User
 
@@ -10,7 +11,7 @@ from datetime import datetime
 
 
 def index(request):
-    listings = Listing.objects.filter(status="active").all()
+    listings = Listing.objects.filter(status="active")
     return render(request, "auctions/index.html", {
         "listings":reversed(listings)
     })
@@ -109,40 +110,48 @@ def listing(request, id, status="None"):
     watchlist = ""
     watchers_count = list_item.watchers.count()
     no_of_bids = UserBid.objects.filter(listing=list_item).count()
-    bids = UserBid.objects.filter(listing=list_item).all()
+    bids = UserBid.objects.filter(listing=list_item)
+    creater = list_item.creater.get()
+    if request.user == creater:
+        creater_view = True
+    else:
+        creater_view = False
     if request.user.is_authenticated:
         watchlist = request.user.watchlist.filter(id=id).first()
-    bids = UserBid.objects.filter(listing=list_item).all()
+    bids = UserBid.objects.filter(listing=list_item)
     if status == "None":
         return render(request, "auctions/listing.html", {
             "list":list_item,
-            "creater":list_item.creater.get(),
-            "watchlist":watchlist,
-            "watchers_count":watchers_count,
-            "no_of_bids":no_of_bids,
-            "bids":reversed(bids)
-        })
-    elif status == "success":
-        return render(request, "auctions/listing.html", {
-            "list":list_item,
-            "creater":list_item.creater.get(),
+            "creater":creater,
             "watchlist":watchlist,
             "watchers_count":watchers_count,
             "no_of_bids":no_of_bids,
             "bids":reversed(bids),
+            "creater_view":creater_view
+        })
+    elif status == "success":
+        return render(request, "auctions/listing.html", {
+            "list":list_item,
+            "creater":creater,
+            "watchlist":watchlist,
+            "watchers_count":watchers_count,
+            "no_of_bids":no_of_bids,
+            "bids":reversed(bids),
+            "creater_view":creater_view,
             "success":True,
             "bid_message":"Congratulations! You have successfully placed your bid."
         })
     elif status == "failed":
         return render(request, "auctions/listing.html", {
             "list":list_item,
-            "creater":list_item.creater.get(),
+            "creater":creater,
             "watchlist":watchlist,
             "watchers_count":watchers_count,
             "no_of_bids":no_of_bids,
             "bids":reversed(bids),
+            "creater_view":creater_view,
             "success":False,
-            "bid_message":"There was an error whilr placing your bid."
+            "bid_message":"There was an error while placing your bid."
         })
 
 
@@ -249,3 +258,24 @@ def place_bid(request, id):
                 })
         else:
             return HttpResponseRedirect(reverse("login"))
+
+def auction_command(request):
+    if request.method == "POST":
+        list_id = int(request.POST['id'])
+        list_item = Listing.objects.get(id=list_id)
+        if list_item.status == "active":
+            if list_item.bids.count() == 0:
+                list_item.status = "unsold"
+                list_item.save()
+            else:
+                list_item.status = "sold"
+                bids = UserBid.objects.filter(listing=list_item)
+                mbid = bids.aggregate(Max('bid'))
+                highest_bid = bids.filter(bid=mbid['bid__max']).first()
+                highest_bid.bidder.bought_items.add(list_item)
+                highest_bid.save()
+                list_item.save()
+        elif list_item.status == "unsold":
+            list_item.status = "active"
+            list_item.save()
+        return HttpResponseRedirect(reverse("listing", args={list_id}))
