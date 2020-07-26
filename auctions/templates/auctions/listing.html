@@ -65,14 +65,14 @@
                                     {% elif list.starting_bid < list.current_bid %}
                                         <input type="number" name="bid" min="{{list.current_bid | add:'1'}}" required="required">
                                     {% endif %}
-                                    <input type="submit" class="btn" value="Place Bid">
+                                    <input type="submit" class="btn Button" value="Place Bid">
                                 {% else %}
                                     {% if list.starting_bid == list.current_bid %}
                                         <input type="number" name="bid" min="{{list.starting_bid}}" disabled>
                                     {% elif list.starting_bid < list.current_bid %}
                                         <input type="number" name="bid" min="{{list.current_bid | add:'1'}}" disabled>
                                     {% endif %}
-                                    <input type="submit" class="btn" value="Place Bid" disabled>
+                                    <input type="submit" class="btn Button" value="Place Bid" disabled>
                                 {% endif %}
                                 &nbsp;&nbsp;
                                 {% if success %}
@@ -113,15 +113,15 @@
                 <h3>
                     <form action="{% url 'auction_command' %}" method="POST">
                         {% csrf_token %}
-                        Bid History&nbsp;&nbsp;
+                        Recent Bids&nbsp;&nbsp;
                         <input type="hidden" value="{{list.id}}" name="id">
                         {% if creater_view %}
                             {% if list.status == "active" %}
-                                <button class="btn Btn end">End Auction</button>
+                                <button class="btn Button">End Auction</button>
                             {% elif list.status == "sold" %}
-                                <button class="btn Btn end" disabled>End Auction</button>
+                                <button class="btn Button" disabled>End Auction</button>
                             {% elif list.status == "unsold" %}
-                                <button class="btn Btn end">Start Auction</button>
+                                <button class="btn Button">Start Auction</button>
                             {% endif %}
                         {% endif %}
                     </form>
@@ -145,7 +145,23 @@
                         {% endfor %}
                     </ul>
                 </div>
+                <center>
+                    <a href="#">See all</a>
+                </center>
             {% endif %}
         </div>
+        <!--
+        <div class="listing-far-lower">
+            <h4>
+                <form action="#">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{list.id}}">
+                    Comments&nbsp;&nbsp;
+                    <button type="submit" class="btn Button">&#10010; Add comment</button>
+                </form>
+            </h4>
+            <div class="comment-div"></div>
+        </div>
+        -->
     </div>
 {% endblock %}

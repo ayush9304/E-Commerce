@@ -1,24 +1,47 @@
-{% extends "auctions/layout.html" %}
+{% load static %}
 
-{% block body %}
 
-    <h2>Login</h2>
-
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
-
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background: url({% static 'auctions/Images/wall.jpg' %});
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container user-page">
+        <div class="user-box">
+            <center>
+                <h2>Login</h2>
+                {% if message %}
+                    <div>
+                        <small>
+                            <span class="star">{{ message }}</span>
+                        </small>
+                    </div>
+                {% endif %}
+                <form action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input autofocus type="text" name="username" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" placeholder="Password">
+                    </div>
+                    <input class="btn Button" type="submit" value="Login">
+                </form>
+                Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+            </center>
         </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Login">
-    </form>
-
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
-
-{% endblock %}
+</div>
+</body>
+</html>

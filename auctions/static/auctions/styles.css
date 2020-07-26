@@ -3,6 +3,17 @@ body {
     word-break: break-all;
     font-family: 'lato', sans-serif;
 }
+
+.user-box{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10vh;
+    height: 55vh;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, .8);
+}
+
 .navbar{
     display: flex;
     height: 14vh;
@@ -28,21 +39,15 @@ body {
     color: #59c65b;
 }
 .right-nav input[type=submit]{
-    background-color: #59c65b;
     color: white;
     padding-left: 25px;
     padding-right: 25px;
     height: 35px;
     border-radius: 2px;
-    margin: 5px;
     border: none;
     font-weight: 500;
 }
-.right-nav input[type=submit]:focus{
-    outline: none;
-    background-color: #4aba4c;
-    transition-duration: 100ms;
-}
+
 .menu{
     background-color: rgb(89, 198, 91);
     display: flex;
@@ -156,18 +161,8 @@ body {
 }
 
 .create-btn{
-    background-color: #59c65b;
-    color: white;
     padding: .25em 2em .3em 2em;
     height: 35px;
-}
-
-.create-btn:hover{
-    color: white;
-}
-
-.create-btn:focus{
-    background-color: #4aba4c;
 }
 
 #cancel{
@@ -224,24 +219,19 @@ body {
     width: 33%;
 }
 
+.listing-far-lower{
+    margin-top: 2em;
+    margin-bottom: 5em;
+}
+
 .bid-form{
     margin-top: 8px;
 }
 
-.bid-form > input[type=submit], .Btn{
-    background-color: #59c65b;
-    color: white;
-    height: 30px;
+.bid-form > input[type=submit]{
+    height: 31px;
     padding: 0px 15px 0px 15px;
-    margin-top: -5px;
-}
-
-.bid-form > input[type=submit]:hover, .Btn:hover{
-    color: white;
-}
-
-.bid-form > input[type=submit]:focus, .Btn{
-    background-color: #4aba4c;
+    margin-top: -2px;
 }
 
 #listing-description{
@@ -340,3 +330,19 @@ body {
     flex-basis: 32%;
 }
 
+.search-btn{
+    margin-top: -3px;
+}
+
+.Button{
+    background-color: #59c65b;
+    color: white;
+}
+.Button:hover{
+    color: white;
+    background-color: #4aba4c;
+}
+
+.comment-div{
+    display: grid;
+}

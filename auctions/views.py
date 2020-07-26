@@ -110,7 +110,7 @@ def listing(request, id, status="None"):
     watchlist = ""
     watchers_count = list_item.watchers.count()
     no_of_bids = UserBid.objects.filter(listing=list_item).count()
-    bids = UserBid.objects.filter(listing=list_item)
+    bids = UserBid.objects.filter(listing=list_item).all().order_by('-id')[:5]
     creater = list_item.creater.get()
     if request.user == creater:
         creater_view = True
@@ -118,7 +118,6 @@ def listing(request, id, status="None"):
         creater_view = False
     if request.user.is_authenticated:
         watchlist = request.user.watchlist.filter(id=id).first()
-    bids = UserBid.objects.filter(listing=list_item)
     if status == "None":
         return render(request, "auctions/listing.html", {
             "list":list_item,
@@ -126,7 +125,7 @@ def listing(request, id, status="None"):
             "watchlist":watchlist,
             "watchers_count":watchers_count,
             "no_of_bids":no_of_bids,
-            "bids":reversed(bids),
+            "bids":bids,
             "creater_view":creater_view
         })
     elif status == "success":
@@ -136,7 +135,7 @@ def listing(request, id, status="None"):
             "watchlist":watchlist,
             "watchers_count":watchers_count,
             "no_of_bids":no_of_bids,
-            "bids":reversed(bids),
+            "bids":bids,
             "creater_view":creater_view,
             "success":True,
             "bid_message":"Congratulations! You have successfully placed your bid."
@@ -148,7 +147,7 @@ def listing(request, id, status="None"):
             "watchlist":watchlist,
             "watchers_count":watchers_count,
             "no_of_bids":no_of_bids,
-            "bids":reversed(bids),
+            "bids":bids,
             "creater_view":creater_view,
             "success":False,
             "bid_message":"There was an error while placing your bid."
