@@ -5,14 +5,111 @@ body {
 }
 
 .user-box{
-    width: 50%;
+    width: 71vw;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 10vh;
-    height: 55vh;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, .8);
+    margin-top: 9vh;
+    height: 82vh;
+    border-radius: 17px;
+    display: flex;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+    color: white;
+    /*background-color: rgba(255,255,255,.6);*/
+    
 }
+
+.user-input-box{
+    width: 67%;
+    height: 100%;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 10%;
+}
+.user-input-box h2{
+    color: #309fac;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+.user-instruction-box{
+    width: 33%;
+    /*background-color: rgba(47, 170, 155, .93);*/
+    background-color: rgba(48, 159, 172, .92);
+    padding-top: 18%;
+    padding-bottom: 15%;
+    font-size: .8em;
+}
+.user-instruction-box h2{
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin-bottom: 1.1rem;
+}
+.user-input-box .message{
+    height: 1.5em;
+}
+.user-input-box .input-div{
+    width: 65%;
+    background-color: #f3f8f7;
+    display: flex;
+    margin-bottom: 10px;
+}
+.input-div div{
+    padding: auto;
+    padding: 5px 1px 7px 10px;
+}
+.input-div input{
+    border: none;
+    background: none;
+    padding: 5px 10px;
+    width: 100%;
+}
+.input-div input:focus{
+    outline: none;
+}
+.input-div ::placeholder{
+    color: #9ba09f;
+}
+
+.user-btn-1{
+    border-radius: 25px;
+    background-color: #309fac;
+    border: none;
+    padding: 9px 40px;
+    color: white;
+    font-size: .8em;
+    margin-top: 1em;
+}
+.user-btn-1:hover{
+    outline: none;
+    background-color: #238e9b;
+    color: white;
+    transition-duration: .2s;
+}
+.user-btn-1:focus, .user-btn-2:focus{
+    outline: none;
+}
+
+.user-btn-2{
+    border-radius: 25px;
+    background-color: #309fac;
+    border: 1px solid white;
+    padding: 9px 40px;
+    color: white;
+    font-size: .95em;
+    margin-top: 1em;
+}
+.user-btn-2:hover{
+    outline: none;
+    color: #309fac;
+    background-color: white;
+    text-decoration: none;
+    transition-duration: .2s;
+}
+
+
+
+
 
 .navbar{
     display: flex;
@@ -24,7 +121,7 @@ body {
     display: flex
 }
 .right-nav input[type=text]{
-    border: 1px solid #59c65b;
+    border: 1px solid #309fac;
     height: 35px;
     width: 20vw;
     border-radius: 2px;
@@ -32,11 +129,11 @@ body {
 }
 .right-nav input[type=text]:focus{
     outline: none;
-    box-shadow: inset 0 0 2.5px #59c65b;
+    box-shadow: inset 0 0 2.5px #309fac;
     transition-duration: 100ms;
 }
 .right-nav ::placeholder{
-    color: #59c65b;
+    color: #309fac;
 }
 .right-nav input[type=submit]{
     color: white;
@@ -49,20 +146,19 @@ body {
 }
 
 .menu{
-    background-color: rgb(89, 198, 91);
+    background-color: #309fac;
     display: flex;
     justify-content: space-between;
     padding: 0px 30px 0px 30px;
-    color: #2b2b2b;
-    margin-bottom: 1em;
+    color: #f3f5f5;
 }
 .menu a{
     text-decoration: none;
     font-weight: 500;
-    color: #3a3a3a;
+    color: #f3f5f5;
 }
 .menu a:hover{
-    color: #000000;
+    color: white;
     transition-duration: 200ms;
 }
 
@@ -206,9 +302,14 @@ body {
     margin: auto;
 }
 
+.listing-middle{
+    margin-top: 1em;
+    padding-bottom: 1em;
+}
+
 .listing-lower{
     margin-top: 2em;
-    margin-bottom: 5em;
+    margin-bottom: 2em;
 }
 
 .listing-lower table{
@@ -224,10 +325,6 @@ body {
     margin-bottom: 5em;
 }
 
-.bid-form{
-    margin-top: 8px;
-}
-
 .bid-form > input[type=submit]{
     height: 31px;
     padding: 0px 15px 0px 15px;
@@ -236,7 +333,8 @@ body {
 
 #listing-description{
     font-size: 14px;
-    margin-left: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .watchlist-div{
@@ -335,14 +433,63 @@ body {
 }
 
 .Button{
-    background-color: #59c65b;
+    background-color: #309fac;
     color: white;
 }
 .Button:hover{
     color: white;
-    background-color: #4aba4c;
+    background-color: #238e9b;
+    transition-duration: .2s;
 }
 
 .comment-div{
-    display: grid;
+    margin-top: 2vh;
+    padding: 20px;
+    display: flex;
+    font-size: .9em;
+}
+.comment-div div{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.comment-div .comment-user{
+    padding-top: 3px;
+    padding-left: 0px;
+}
+.comment-div .comment-data{
+    padding-top: 5px;
+}
+.comment-div .comment-user span{
+    font-weight: 550;
+    font-size: 1.1em;
+}
+.comment-div small{
+    color: grey;
+}
+
+#ncy{
+    padding-left: 20px;
+    font-size: .9em;
+    color: #2f3030;
+}
+
+.add-comment-div{
+    margin-top: 30px;
+    padding: 20px;
+}
+.add-comment-div textarea{
+    width: 100%;
+    min-height: 4vh;
+}
+
+.message-popup{
+    display: flex;
+    padding: 9px 10px 9px 60px;
+    background-color: rgb(214,255,214);
+    color: #333;
+    font-size: .9em;
+}
+#msg{
+    padding-top: 2px;
 }

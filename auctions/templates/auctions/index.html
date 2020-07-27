@@ -4,11 +4,13 @@
 
 {% block body %}
     <div class="container">
-        {% if result_title %}
-            <h2>{{result_title}}</h2>
-        {% else %}
-            <h2>Active Listings</h2>
-        {% endif %}
+        <div class="heading">
+            {% if result_title %}
+                <h2>{{result_title}}</h2>
+            {% else %}
+                <h2>Active Listings</h2>
+            {% endif %}
+        </div>
         <div class="list">
             {% for list in listings %}
                 <div class="list-item">

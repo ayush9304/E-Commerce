@@ -19,21 +19,12 @@ class Listing(models.Model):
         return f"(ID: {self.id}) {self.title}"
     
 
-
-class UserComment(models.Model):
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
-    comment = models.TextField()
-
-    def __str__(self):
-        return f"{self.comment}"
-    
-
 class User(AbstractUser):
     watchlist = models.ManyToManyField(Listing, blank=True, related_name="watchers")
     listing = models.ManyToManyField(Listing, blank=True, related_name="creater")
     bought_items = models.ManyToManyField(Listing, blank=True, related_name="buyer")
     #bids = models.ManyToManyField(UserBid, blank=True, related_name="bidder")
-    comments = models.ManyToManyField(UserComment, blank=True, related_name="commenter")
+    #comments = models.ManyToManyField(UserComment, blank=True, related_name="commenter")
 
     def __str__(self):
         return f"{self.username}"
@@ -47,3 +38,13 @@ class UserBid(models.Model):
 
     def __str__(self):
         return f"{self.bidder} : [{self.listing.first()}]  US ${self.bid}"
+
+
+class UserComment(models.Model):
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_comment")
+    listing = models.ManyToManyField(Listing, related_name="comments")
+    comment = models.TextField()
+    time = models.DateTimeField(datetime.now)
+
+    def __str__(self):
+        return f"{self.commenter} : [{self.listing.first()}] {self.comment}"

@@ -111,7 +111,28 @@ def listing(request, id, status="None"):
     watchers_count = list_item.watchers.count()
     no_of_bids = UserBid.objects.filter(listing=list_item).count()
     bids = UserBid.objects.filter(listing=list_item).all().order_by('-id')[:5]
+    comments = UserComment.objects.filter(listing=list_item).all().order_by('-id')
     creater = list_item.creater.get()
+    outbid = ""
+    if request.user.is_authenticated:
+        if (no_of_bids > 0):
+            userBids = UserBid.objects.filter(bidder=request.user, listing=list_item)
+            if userBids:
+                userBid = max([userBid.bid for userBid in userBids])
+                if userBid == list_item.current_bid:
+                    outbid = "no"
+                else:
+                    outbid = "yes"
+    if list_item.status == "sold":
+        if request.user == list_item.buyer.get():
+            success = True
+            message = "Congratulations! you have won this auction."
+        else:
+            success = False
+            message = ""
+    else:
+        success = False
+        message = ""
     if request.user == creater:
         creater_view = True
     else:
@@ -124,33 +145,45 @@ def listing(request, id, status="None"):
             "creater":creater,
             "watchlist":watchlist,
             "watchers_count":watchers_count,
+            "outbid":outbid,
             "no_of_bids":no_of_bids,
             "bids":bids,
-            "creater_view":creater_view
+            "comments":comments,
+            "creater_view":creater_view,
+            "success":success,
+            "message":message
         })
     elif status == "success":
+        success = True
+        message = "Congratulations! You have successfully placed your bid."
         return render(request, "auctions/listing.html", {
             "list":list_item,
             "creater":creater,
             "watchlist":watchlist,
             "watchers_count":watchers_count,
+            "outbid":outbid,
             "no_of_bids":no_of_bids,
             "bids":bids,
+            "comments":comments,
             "creater_view":creater_view,
-            "success":True,
-            "bid_message":"Congratulations! You have successfully placed your bid."
+            "success":success,
+            "message":message
         })
     elif status == "failed":
+        success = False
+        message = "There was an error while placing your bid."
         return render(request, "auctions/listing.html", {
             "list":list_item,
             "creater":creater,
             "watchlist":watchlist,
             "watchers_count":watchers_count,
+            "outbid":outbid,
             "no_of_bids":no_of_bids,
             "bids":bids,
+            "comments":comments,
             "creater_view":creater_view,
-            "success":False,
-            "bid_message":"There was an error while placing your bid."
+            "success":success,
+            "message":message
         })
 
 
@@ -221,9 +254,7 @@ def place_bid(request, id):
                         list_item.save()
                         user_bid = UserBid.objects.create(bidder=request.user, bid=bid_amount, time=bid_time)
                         user_bid.listing.add(list_item)
-                        ####user_bid.bidder.add(request.user)
                         user_bid.save()
-                        #request.user.bids.add(user_bid)
                         return HttpResponseRedirect(reverse("bid_result", kwargs={
                             "id":list_id,
                             "status":"success"
@@ -239,9 +270,7 @@ def place_bid(request, id):
                         list_item.save()
                         user_bid = UserBid.objects.create(bidder=request.user, bid=bid_amount, time=bid_time)
                         user_bid.listing.add(list_item)
-                        ####user_bid.bidder.add(request.user)
                         user_bid.save()
-                        #request.user.bids.add(user_bid)
                         return HttpResponseRedirect(reverse("bid_result", kwargs={
                             "id":list_id,
                             "status":"success"
@@ -257,6 +286,20 @@ def place_bid(request, id):
                 })
         else:
             return HttpResponseRedirect(reverse("login"))
+
+def bids(request, id):
+    list_item = Listing.objects.get(id=id)
+    bids = UserBid.objects.filter(listing=list_item).all().order_by('-id')
+    creater = list_item.creater.get()
+    if request.user == creater:
+        creater_view = True
+    else:
+        creater_view = False
+    return render(request, "auctions/bids.html", {
+        "bids":bids,
+        "list":list_item,
+        "creater_view":creater_view
+    })
 
 def auction_command(request):
     if request.method == "POST":
@@ -278,3 +321,17 @@ def auction_command(request):
             list_item.status = "active"
             list_item.save()
         return HttpResponseRedirect(reverse("listing", args={list_id}))
+
+def add_comment(request):
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            list_id = int(request.POST['id'])
+            comment_data = request.POST['comment']
+            list_item = Listing.objects.get(id=list_id)
+            comment_time = datetime.now()
+            user_comment = UserComment.objects.create(commenter=request.user, comment=comment_data, time=comment_time)
+            user_comment.listing.add(list_item)
+            user_comment.save()
+            return HttpResponseRedirect(reverse("listing", args={list_id}))
+        else:
+            return HttpResponseRedirect(reverse("login"))

@@ -2,7 +2,9 @@
 
 {% block body %}
     <div class="container">
-        <h2>Create Listing</h2>
+        <div class="heading">
+            <h2>Create Listing</h2>
+        </div>
         <form action="{% url 'create' %}" method="POST">
             <div class="c_form">
                 {% csrf_token %}

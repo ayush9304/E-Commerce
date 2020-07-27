@@ -1,0 +1,48 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    <div class="container">
+        <div class="heading">
+            <h2>
+                <form action="{% url 'auction_command' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{list.id}}" name="id">
+                    Bid History&nbsp;
+                    {% if creater_view %}
+                        {% if list.status == "active" %}
+                            <button class="btn Button">End Auction</button>
+                        {% elif list.status == "sold" %}
+                            <button class="btn Button" disabled>End Auction</button>
+                        {% elif list.status == "unsold" %}
+                            <button class="btn Button">Start Auction</button>
+                        {% endif %}
+                    {% endif %}
+                </form>
+            </h2>
+        </div>
+        <div class="listing-lower">
+            {% if bids %}
+                <div class="bids-div">
+                    <ul class="responsive-table">
+                        <li class="table-header">
+                            <div class="col col-1">Bid Id</div>
+                            <div class="col col-2">Bidder</div>
+                            <div class="col col-3">Bid Amount</div>
+                            <div class="col col-4">Bid Time</div>
+                        </li>
+                        {% for bid in bids %}
+                            <li class="table-row">
+                                <div class="col col-1" data-label="Bid Id">{{bid.id}}</div>
+                                <div class="col col-2" data-label="Bidder">{{bid.bidder}}</div>
+                                <div class="col col-3" data-label="Bid Amount">US ${{bid.bid}}</div>
+                                <div class="col col-4" data-label="Bid Time">{{bid.time}}</div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
+                <center>No bids yet.</center>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
