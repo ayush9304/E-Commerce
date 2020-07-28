@@ -314,6 +314,6 @@ def categories(request, category_code=None):
         category = Category.objects.get(code=category_code)
         listings = Listing.objects.filter(category=category, status="active").all()
         return render(request, "auctions/index.html", {
-            "listings":listings,
+            "listings":reversed(listings),
             "result_title":f"Categories > {category.name}"
         })

@@ -2,53 +2,102 @@
 
 {% block body %}
     <div class="container">
+        <h3>Categories</h3>
         <div class="row">
-            <a href="{% url 'index' %}">
-                <div>All Categories</div>
-            </a>
-            <a href="{% url 'category' 'MOT' %}">
-                <div>Motors</div>
-            </a>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'index' %}">
+                        <div>All Categories</div>
+                    </a>
+                </center>
+            </div>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'category' 'MOT' %}">
+                        <div>Motors</div>
+                    </a>
+                </center>
+            </div>
         </div>
         <div class="row">
-            <a href="{% url 'category' 'ELN' %}">
-                <div>Electronics</div>
-            </a>
-            <a href="{% url 'category' 'FSH' %}">
-                <div>Fashion</div>
-            </a>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'category' 'ELN' %}">
+                        <div>Electronics</div>
+                    </a>
+                </center>
+            </div>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'category' 'FSH' %}">
+                        <div>Fashion</div>
+                    </a>
+                </center>
+            </div>
         </div>
         <div class="row">
-            <a href="{% url 'category' 'BMM' %}">
-                <div>Books, Movies & Music</div>
-            </a>
-            <a href="{% url 'category' 'CTA' %}">
-                <div>Collectibles & Art</div>
-            </a>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'category' 'BMM' %}">
+                        <div>Books, Movies & Music</div>
+                    </a>
+                </center>
+            </div>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'category' 'CTA' %}">
+                        <div>Collectibles & Art</div>
+                    </a>
+                </center>
+            </div>
         </div>
         <div class="row">
-            <a href="{% url 'category' 'HGN' %}">
-                <div>Home & Garden</div>
-            </a>
-            <a href="{% url 'category' 'SPG' %}">
-                <div>Sporting Goods</div>
-            </a>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'category' 'HGN' %}">
+                        <div>Home & Garden</div>
+                    </a>
+                </center>
+            </div>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'category' 'SPG' %}">
+                        <div>Sporting Goods</div>
+                    </a>
+                </center>
+            </div>
         </div>
         <div class="row">
-            <a href="{% url 'category' 'THB' %}">
-                <div>Toys & Hobbies</div>
-            </a>
-            <a href="{% url 'category' 'BID' %}">
-                <div>Business & Industrial</div>
-            </a>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'category' 'THB' %}">
+                        <div>Toys & Hobbies</div>
+                    </a>
+                </center>
+            </div>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'category' 'BID' %}">
+                        <div>Business & Industrial</div>
+                    </a>
+                </center>
+            </div>
         </div>
         <div class="row">
-            <a href="{% url 'category' 'HLB' %}">
-                <div>Health & Beauty</div>
-            </a>
-            <a href="{% url 'category' 'OTH' %}">
-                <div>Others</div>
-            </a>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'category' 'HLB' %}">
+                        <div>Health & Beauty</div>
+                    </a>
+                </center>
+            </div>
+            <div class="row-item">
+                <center>
+                    <a href="{% url 'category' 'OTH' %}">
+                        <div>Others</div>
+                    </a>
+                </center>
+            </div>
         </div>
         </div>
     </div>
