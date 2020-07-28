@@ -4,11 +4,19 @@ from django.db import models
 from datetime import datetime
 #Create your models here.
 
+class Category(models.Model):
+    code = models.CharField(max_length=3)
+    name = models.CharField(max_length=45)
+
+    def __str__(self):
+        return f"{self.name} ({self.code})"
+    
+
 class Listing(models.Model):
     title = models.CharField(max_length=130)
     description = models.TextField()
     image = models.CharField(max_length=1000, blank=True)
-    category = models.CharField(max_length=45, default='No category provided')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="listing")
     starting_bid = models.FloatField()
     current_bid = models.FloatField()
     condition = models.CharField(max_length=5)
@@ -23,8 +31,6 @@ class User(AbstractUser):
     watchlist = models.ManyToManyField(Listing, blank=True, related_name="watchers")
     listing = models.ManyToManyField(Listing, blank=True, related_name="creater")
     bought_items = models.ManyToManyField(Listing, blank=True, related_name="buyer")
-    #bids = models.ManyToManyField(UserBid, blank=True, related_name="bidder")
-    #comments = models.ManyToManyField(UserComment, blank=True, related_name="commenter")
 
     def __str__(self):
         return f"{self.username}"

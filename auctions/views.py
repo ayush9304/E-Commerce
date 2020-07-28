@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.db.models import Max
 
-from .models import Listing, UserBid, UserComment, User
+from .models import *
 
 from datetime import datetime
 
@@ -73,9 +73,10 @@ def create(request):
         title = request.POST.get('title')
         description = request.POST.get('description')
         image = request.POST.get('image')
-        category = request.POST.get('category')
-        if not category:
-            category = "Category not provided"
+        category_code = request.POST.get('category')
+        if not category_code:
+            category_code = "CNP"
+        category = Category.objects.get(code=category_code)
         s_bid = request.POST.get('s_bid')
         condition = request.POST.get('condition')
         c_time = datetime.now()
@@ -139,52 +140,32 @@ def listing(request, id, status="None"):
         creater_view = False
     if request.user.is_authenticated:
         watchlist = request.user.watchlist.filter(id=id).first()
-    if status == "None":
-        return render(request, "auctions/listing.html", {
-            "list":list_item,
-            "creater":creater,
-            "watchlist":watchlist,
-            "watchers_count":watchers_count,
-            "outbid":outbid,
-            "no_of_bids":no_of_bids,
-            "bids":bids,
-            "comments":comments,
-            "creater_view":creater_view,
-            "success":success,
-            "message":message
-        })
-    elif status == "success":
+    if status == "success":
         success = True
         message = "Congratulations! You have successfully placed your bid."
-        return render(request, "auctions/listing.html", {
-            "list":list_item,
-            "creater":creater,
-            "watchlist":watchlist,
-            "watchers_count":watchers_count,
-            "outbid":outbid,
-            "no_of_bids":no_of_bids,
-            "bids":bids,
-            "comments":comments,
-            "creater_view":creater_view,
-            "success":success,
-            "message":message
-        })
-    elif status == "failed":
+
+    elif status == "error_code1":
+        success = False
+        message = f"Error: Bid amount must be greater than or equal to US ${list_item.starting_bid}"
+    elif status == "error_code2":
+        success = False
+        message = f"Error: Bid amount must be greater than US ${list_item.current_bid}"
+    elif status == "error_code3":
         success = False
         message = "There was an error while placing your bid."
-        return render(request, "auctions/listing.html", {
-            "list":list_item,
-            "creater":creater,
-            "watchlist":watchlist,
-            "watchers_count":watchers_count,
-            "outbid":outbid,
-            "no_of_bids":no_of_bids,
-            "bids":bids,
-            "comments":comments,
-            "creater_view":creater_view,
-            "success":success,
-            "message":message
-        })
+    return render(request, "auctions/listing.html", {
+        "list":list_item,
+        "creater":creater,
+        "watchlist":watchlist,
+        "watchers_count":watchers_count,
+        "outbid":outbid,
+        "no_of_bids":no_of_bids,
+        "bids":bids,
+        "comments":comments,
+        "creater_view":creater_view,
+        "success":success,
+        "message":message
+    })
 
 
 def watchlist(request):
@@ -248,42 +229,32 @@ def place_bid(request, id):
             list_item = Listing.objects.get(id=list_id)
             bid_time = datetime.now()
             try:
-                if list_item.current_bid == list_item.starting_bid:
-                    if bid_amount >= list_item.starting_bid:
-                        list_item.current_bid = bid_amount
-                        list_item.save()
-                        user_bid = UserBid.objects.create(bidder=request.user, bid=bid_amount, time=bid_time)
-                        user_bid.listing.add(list_item)
-                        user_bid.save()
+                if UserBid.objects.filter(listing=list_item).count() == 0:
+                    if bid_amount < list_item.starting_bid:
                         return HttpResponseRedirect(reverse("bid_result", kwargs={
                             "id":list_id,
-                            "status":"success"
+                            "status":"error_code1"
                         }))
-                    else:
-                            return HttpResponseRedirect(reverse("bid_result", kwargs={
-                            "id":list_id,
-                            "status":"failed"
-                            }))
                 else:
-                    if bid_amount > list_item.current_bid:
-                        list_item.current_bid = bid_amount
-                        list_item.save()
-                        user_bid = UserBid.objects.create(bidder=request.user, bid=bid_amount, time=bid_time)
-                        user_bid.listing.add(list_item)
-                        user_bid.save()
+                    if bid_amount <= list_item.current_bid:
                         return HttpResponseRedirect(reverse("bid_result", kwargs={
                             "id":list_id,
-                            "status":"success"
-                            }))
-                    else:
-                        return HttpResponseRedirect(reverse("bid_result", kwargs={
-                            "id":list_id,
-                            "status":"failed"
-                            }))
+                            "status":"error_code2"
+                        }))
+                list_item.current_bid = bid_amount
+                list_item.save()
+                user_bid = UserBid.objects.create(bidder=request.user, bid=bid_amount, time=bid_time)
+                user_bid.listing.add(list_item)
+                user_bid.save()
+                return HttpResponseRedirect(reverse("bid_result", kwargs={
+                    "id":list_id,
+                    "status":"success"
+                }))
             except expression as e:
-                return render(request, "auctions/message.html", {
-                    "message":f"There was an error while placing your bid : {e}"
-                })
+                return HttpResponseRedirect(reverse("bid_result", kwargs={
+                    "id":list_id,
+                    "status":"error_code3"
+                    }))
         else:
             return HttpResponseRedirect(reverse("login"))
 
@@ -335,3 +306,14 @@ def add_comment(request):
             return HttpResponseRedirect(reverse("listing", args={list_id}))
         else:
             return HttpResponseRedirect(reverse("login"))
+
+def categories(request, category_code=None):
+    if category_code == None:
+        return render(request, "auctions/categories.html")
+    else:
+        category = Category.objects.get(code=category_code)
+        listings = Listing.objects.filter(category=category, status="active").all()
+        return render(request, "auctions/index.html", {
+            "listings":listings,
+            "result_title":f"Categories > {category.name}"
+        })

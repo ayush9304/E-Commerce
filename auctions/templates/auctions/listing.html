@@ -4,20 +4,25 @@
 
 {% block body %}
     {% if message %}
-        <div class="message-popup">        
-            <div>
-                {% if success %}
+        {% if success %}
+            <div class="message-popup success">
+                <div>
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="#70bf2b" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                     </svg>
-                {% else %}
+                </div>
+                <div id="msg">&nbsp;&nbsp;{{ message }}</div>
+            </div>
+        {% else %}
+            <div class="message-popup error">
+                <div>
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle-fill" fill="#d12020" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.146-3.146a.5.5 0 0 0-.708-.708L8 7.293 4.854 4.146a.5.5 0 1 0-.708.708L7.293 8l-3.147 3.146a.5.5 0 0 0 .708.708L8 8.707l3.146 3.147a.5.5 0 0 0 .708-.708L8.707 8l3.147-3.146z"/>
                     </svg>
-                {% endif %}
+                </div>
+                <div id="msg">&nbsp;&nbsp;{{ message }}</div>
             </div>
-            <div id="msg">&nbsp;&nbsp;{{ message }}</div>
-        </div>
+        {% endif %}
     {% endif %}
     <div class="container">
         <div class="listing-upper">
@@ -89,11 +94,8 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="id" value="{{list.id}}">
                                 {% if list.status == "active" %}
-                                    {% if list.starting_bid == list.current_bid %}
-                                        <input type="number" name="bid" min="{{list.starting_bid}}" required="required">
-                                    {% elif list.starting_bid < list.current_bid %}
-                                        <input type="number" name="bid" min="{{list.current_bid | add:'1'}}" required="required">
-                                    {% endif %}
+                                    <input type="number" name="bid" required="required">
+                                    
                                     <input type="submit" class="btn Button" value="Place Bid">
                                 {% else %}
                                     {% if list.starting_bid == list.current_bid %}
@@ -132,42 +134,44 @@
             <p id="listing-description">{{list.description}}</p>
         </div>
         <div class="listing-lower">
-            {% if bids %}
-                <h4>
-                    <form action="{% url 'auction_command' %}" method="POST">
-                        {% csrf_token %}
-                        Recent Bids&nbsp;&nbsp;
-                        <input type="hidden" value="{{list.id}}" name="id">
-                        {% if creater_view %}
-                            {% if list.status == "active" %}
-                                <button class="btn Button">End Auction</button>
-                            {% elif list.status == "sold" %}
-                                <button class="btn Button" disabled>End Auction</button>
-                            {% elif list.status == "unsold" %}
-                                <button class="btn Button">Start Auction</button>
-                            {% endif %}
+            <h4>
+                <form action="{% url 'auction_command' %}" method="POST">
+                    {% csrf_token %}
+                    Recent Bids&nbsp;&nbsp;
+                    <input type="hidden" value="{{list.id}}" name="id">
+                    {% if creater_view %}
+                        {% if list.status == "active" %}
+                            <button class="btn Button">End Auction</button>
+                        {% elif list.status == "sold" %}
+                            <button class="btn Button" disabled>End Auction</button>
+                        {% elif list.status == "unsold" %}
+                            <button class="btn Button">Start Auction</button>
                         {% endif %}
-                    </form>
-                </h4>
-                <br>
-                <div class="bids-div">
-                    <ul class="responsive-table">
-                        <li class="table-header">
-                            <div class="col col-1">Bid Id</div>
-                            <div class="col col-2">Bidder</div>
-                            <div class="col col-3">Bid Amount</div>
-                            <div class="col col-4">Bid Time</div>
+                    {% endif %}
+                </form>
+            </h4>
+            <br>
+            <div class="bids-div">
+                <ul class="responsive-table">
+                    <li class="table-header">
+                        <div class="col col-1">Bid Id</div>
+                        <div class="col col-2">Bidder</div>
+                        <div class="col col-3">Bid Amount</div>
+                        <div class="col col-4">Bid Time</div>
+                    </li>
+                    {% for bid in bids %}
+                        <li class="table-row">
+                            <div class="col col-1" data-label="Bid Id">{{bid.id}}</div>
+                            <div class="col col-2" data-label="Bidder">{{bid.bidder}}</div>
+                            <div class="col col-3" data-label="Bid Amount">US ${{bid.bid}}</div>
+                            <div class="col col-4" data-label="Bid Time">{{bid.time}}</div>
                         </li>
-                        {% for bid in bids %}
-                            <li class="table-row">
-                                <div class="col col-1" data-label="Bid Id">{{bid.id}}</div>
-                                <div class="col col-2" data-label="Bidder">{{bid.bidder}}</div>
-                                <div class="col col-3" data-label="Bid Amount">US ${{bid.bid}}</div>
-                                <div class="col col-4" data-label="Bid Time">{{bid.time}}</div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
+                    {% empty %}
+                        <center>No bids yet.</center>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% if bids %}
                 <center>
                     <a href="{% url 'bids' list.id %}">See all</a>
                 </center>
